@@ -1,0 +1,104 @@
+package numbergame;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+// Abstract class Game
+abstract class Game {
+    public void start() {
+        System.out.println("Game is starting... \n");
+    }
+    
+    // Public function to print when the game ends
+    public void end() {
+        System.out.println("Game has ended.");
+    }
+    
+    
+    // Abstract method
+    public abstract void play();
+}
+
+// NumberGuessingGame inherits from Game
+public class NumberGuessingGame extends Game {
+
+    // Public function to execute the game
+    public void play() {
+    	// We use the random class to generate a random number
+        Random rand = new Random();
+        Scanner scanner = new Scanner(System.in);
+        
+        // We explain the game to the user
+        System.out.println("Hi there! This is the Number Guessing Number");
+        System.out.println("You would have the chance to guess a random number between 1 - 100");
+        System.out.println("You can choose to have a few or many oppportunities, don't cheat, don't choose to have a 100 chances! \n");
+        
+        // We present ourselves and ask for the user´s name 
+        System.out.println("Before starting I want to introduce myself I'm Jorge and I developed this game");
+        System.out.println("What's your name? \n");
+        String userName = scanner.next();
+        
+        System.out.println("It's great to meet you " + userName);
+        System.out.println("Now let's start the game! \n");
+        		
+        // We ask the user to specify the number of attempts
+        System.out.println("Enter the number of attempts you want:");
+        // We create a variable to contain the allowed number of attempts,
+        // this by decision of the user. 
+        int maxAttempts = scanner.nextInt();
+        
+        // We store the random number between 0 and 100 in a int variable
+        int randomNumber = rand.nextInt(100) + 1;
+        // This is just for testing 
+        // System.out.println("Generated number (for testing): " + randomNumber);
+        
+        // We create a variable to store the number of tries 
+        int tryCount = 0;
+        ArrayList<Integer> guesses = new ArrayList<>();
+        
+        while (tryCount < maxAttempts) { 
+        	// We limit the number of attempts
+            System.out.println("Enter your guess (1-100):"); 
+            int playerGuess = scanner.nextInt();
+            // Every time the user make a guess the try count increases by 1
+            tryCount++;
+            guesses.add(playerGuess);
+            
+            // If the user guesses the number he wins
+            if (playerGuess == randomNumber) {
+                System.out.println("Correct! You Win!");
+                System.out.println("Congratulations " + userName);
+                System.out.println("It took you " + tryCount + " tries");
+                
+                // Display all previous guesses
+                System.out.println("Your guesses were: " + guesses);
+                // We end the game when the user guesses the number. 
+                break;
+                // If the user choose a lower number, we encourage him to choose a higher one
+            } else if (randomNumber > playerGuess) {
+                System.out.println("Nope! Sorry " + userName + " the number is higher. Guess again!");
+                // If the user choose a higher number, we encourage him to choose a lower one
+            } else {
+                System.out.println("Nope! Sorry " + userName + " the number is lower. Guess again!");
+            }
+        }
+
+        // Check if the user has exhausted all attempts
+        if (tryCount >= maxAttempts) {
+            System.out.println("Sorry " + userName + "!" + " You've used all your attempts. The number was: " + randomNumber);
+         // Display all previous guesses
+            System.out.println("Your guesses were: " + guesses);
+        }
+
+        scanner.close();
+    }
+
+    	// We call the main function of the program
+    public static void main(String[] args) {
+        NumberGuessingGame game = new NumberGuessingGame();
+        
+        game.start(); // Start the game (inherited from Game)
+        game.play();  // Play the specific game logic (implemented here)
+        game.end();   // End the game (inherited from Game)
+    }
+}
